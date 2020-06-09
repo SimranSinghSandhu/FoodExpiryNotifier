@@ -61,7 +61,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! CustomCell
-        
+        // Assigning Delegates Fuctions to TextField
+        cell.nameTextField.delegate = self
         return cell
     }
     
@@ -98,12 +99,6 @@ extension ViewController {
         // When Done Button is Presssed
         endEditing()
     }
-    
-    
-    private func endEditing() {
-        defaultNavigationItemSettings() // Setting the Navigation Settings to Defaults
-        tableView.endEditing(true) // End All the Editing of TableView.
-    }
 }
 
 
@@ -111,7 +106,7 @@ extension ViewController: UITextFieldDelegate {
     
     private func addingNewItem() {
         
-        // Creating Indexpath for Inserting Cell in TableView
+        // Getting the Current IndexPath.
         let indexPath: IndexPath = [0, items.count]
         
         let newItem = Item() // Creating Instance of Items Array
@@ -125,4 +120,13 @@ extension ViewController: UITextFieldDelegate {
         tableView.endUpdates()
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        endEditing()
+        return true
+    }
+    
+    private func endEditing() {
+        defaultNavigationItemSettings() // Setting the Navigation Settings to Defaults
+        tableView.endEditing(true) // End All the Editing of TableView.
+    }
 }
