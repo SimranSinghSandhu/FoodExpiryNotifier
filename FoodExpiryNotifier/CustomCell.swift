@@ -10,11 +10,11 @@ import UIKit
 
 class CustomCell: UITableViewCell {
     
-    let nameLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 24)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    let nameTextField: UITextField = {
+        let textField = UITextField()
+        textField.font = UIFont.boldSystemFont(ofSize: 24)
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
     }()
     
     required init?(coder: NSCoder) {
@@ -24,15 +24,17 @@ class CustomCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.addSubview(nameLabel)
+        
+        addSubview(nameTextField)
         settingConstraints()
+        layoutIfNeeded()
     }
     
     
     private func settingConstraints() {
-        nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
-        nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 0).isActive = true
-        nameLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        nameLabel.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        nameTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
+        nameTextField.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 0).isActive = true
+        nameTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        nameTextField.widthAnchor.constraint(equalToConstant: 200).isActive = true
     }
 }

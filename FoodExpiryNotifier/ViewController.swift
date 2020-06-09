@@ -38,7 +38,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! CustomCell
         
-        cell.nameLabel.text = "Batman"
+        cell.nameTextField.text = "Batman"
         return cell
     }
     
@@ -59,5 +59,4 @@ extension ViewController {
     @objc func addBtnHandle() {
         print("Add Button Pressed!")
     }
-    
 }
