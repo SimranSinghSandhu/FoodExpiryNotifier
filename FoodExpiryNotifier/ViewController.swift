@@ -11,6 +11,25 @@ import UIKit
 class ViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+
+    // Navigation Item to Add Button
+    let addBtn: UIBarButtonItem = {
+        let btn = UIBarButtonItem()
+        btn.title = "Add"
+        btn.style = .done
+        btn.action = #selector(addBtnHandle)
+        return btn
+    }()
+    
+    // Navigation Item for Done Button
+    let doneBtn: UIBarButtonItem = {
+        let btn = UIBarButtonItem()
+        btn.title = "Done"
+        btn.style = .done
+        btn.action = #selector(doneBtnHandle)
+        return btn
+    }()
+    
     let cellID = "cellID"
     
     var items = [Item]()
@@ -25,7 +44,10 @@ class ViewController: UIViewController {
         // Registering the Cell with the Custome Class using a Unique Indentifier.
         tableView.register(CustomCell.self, forCellReuseIdentifier: cellID)
         
-        settingNavigationItems()
+        addBtn.target = self
+        doneBtn.target = self
+        
+        defaultNavigationItemSettings()
     }
     
 }
@@ -40,7 +62,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! CustomCell
         
-//        cell.nameTextField.text = ""
         return cell
     }
     
@@ -60,17 +81,31 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 extension ViewController {
     
     // Setting Up Navigation Bar Buttons
-    private func settingNavigationItems() {
-        let addBtn = UIBarButtonItem(title: "Add", style: .done, target: self, action: #selector(addBtnHandle))
+    private func defaultNavigationItemSettings() {
         navigationItem.rightBarButtonItem = addBtn
+        navigationItem.leftBarButtonItem = nil
     }
     
     // To Add new Item in the TableView.
     @objc func addBtnHandle() {
-        print("Add Button Pressed!")
+        // When Add Button is Pressed
         addingNewItem()
+        navigationItem.rightBarButtonItem = nil
+        navigationItem.leftBarButtonItem = doneBtn
+    }
+    
+    @objc func doneBtnHandle() {
+        // When Done Button is Presssed
+        endEditing()
+    }
+    
+    
+    private func endEditing() {
+        defaultNavigationItemSettings() // Setting the Navigation Settings to Defaults
+        tableView.endEditing(true) // End All the Editing of TableView.
     }
 }
+
 
 extension ViewController: UITextFieldDelegate {
     
