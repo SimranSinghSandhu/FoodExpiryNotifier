@@ -12,6 +12,7 @@ class CustomCell: UITableViewCell {
     
     let nameLabel: UILabel = {
         let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 24)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
