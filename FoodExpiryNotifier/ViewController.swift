@@ -101,6 +101,10 @@ extension ViewController {
     @objc func addBtnHandle() {
         // When Add Button is Pressed
         addingNewItem()
+        navigationBtnSwapping()
+    }
+    
+    private func navigationBtnSwapping() {
         navigationItem.rightBarButtonItem = nil
         navigationItem.leftBarButtonItem = doneBtn
     }
@@ -130,8 +134,17 @@ extension ViewController: UITextFieldDelegate {
         tableView.endUpdates()
     }
     
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        
+        navigationBtnSwapping()
+        
+        let indexPath = getIndexPathOfSelectedTextField(textField: textField)
+        tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+    }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         updatingItem(textField: textField)
+        deletingEmptyCells(textField: textField)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -155,8 +168,11 @@ extension ViewController {
     // Getting the Current IndexPath of the Selected Textfield.
     private func getIndexPathOfSelectedTextField(textField: UITextField) -> IndexPath {
         let textFieldPoint = textField.convert(textField.bounds.origin, to: tableView)
-        let indexPath = tableView.indexPathForRow(at: textFieldPoint)
-        return indexPath!
+        if let indexPath = tableView.indexPathForRow(at: textFieldPoint) {
+            return indexPath
+        } else {
+            return [0, 0]
+        }
     }
     
     // Updating Item Data according to TextField Text.
@@ -165,4 +181,14 @@ extension ViewController {
         items[indexPath.row].name = textField.text
     }
     
+    // Deleting Empty Cells
+    private func deletingEmptyCells(textField: UITextField) {
+        let indexPath = getIndexPathOfSelectedTextField(textField: textField)
+        if items[indexPath.row].name == "" {
+            items.remove(at: indexPath.row)
+            tableView.beginUpdates()
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.endUpdates()
+        }
+    }
 }
