@@ -77,6 +77,16 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             cell.nameTextField.becomeFirstResponder()
         }
     }
+    
+    // Deleting Item with Swiped Left of Cell.
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, Completion) in
+            self.items.remove(at: indexPath.row)
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            Completion(true)
+        }
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
 }
 
 extension ViewController {
@@ -101,7 +111,7 @@ extension ViewController {
     }
 }
 
-
+// TextField Delegate Functions
 extension ViewController: UITextFieldDelegate {
     
     private func addingNewItem() {
@@ -120,8 +130,17 @@ extension ViewController: UITextFieldDelegate {
         tableView.endUpdates()
     }
     
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        updatingItem(textField: textField)
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        endEditing()
+        
+        if textField.text == "" { // If textField Text is Empty
+            endEditing() // End TableView Editing.
+        } else { // If TextField Text is Not Empty
+            addingNewItem() // Add Another Item
+        }
         return true
     }
     
@@ -129,4 +148,21 @@ extension ViewController: UITextFieldDelegate {
         defaultNavigationItemSettings() // Setting the Navigation Settings to Defaults
         tableView.endEditing(true) // End All the Editing of TableView.
     }
+}
+
+extension ViewController {
+    
+    // Getting the Current IndexPath of the Selected Textfield.
+    private func getIndexPathOfSelectedTextField(textField: UITextField) -> IndexPath {
+        let textFieldPoint = textField.convert(textField.bounds.origin, to: tableView)
+        let indexPath = tableView.indexPathForRow(at: textFieldPoint)
+        return indexPath!
+    }
+    
+    // Updating Item Data according to TextField Text.
+    private func updatingItem(textField: UITextField) {
+        let indexPath = getIndexPathOfSelectedTextField(textField: textField)
+        items[indexPath.row].name = textField.text
+    }
+    
 }
