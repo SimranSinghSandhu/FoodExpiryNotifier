@@ -47,7 +47,7 @@ class ViewController: UIViewController {
         addBtn.target = self
         doneBtn.target = self
         
-        defaultNavigationItemSettings()
+        navigationItemSettings(btn: addBtn)
     }
     
 }
@@ -92,23 +92,17 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 extension ViewController {
     
     // Setting Up Navigation Bar Buttons
-    private func defaultNavigationItemSettings() {
-        navigationItem.rightBarButtonItem = addBtn
-        navigationItem.leftBarButtonItem = nil
+    private func navigationItemSettings(btn: UIBarButtonItem) {
+        navigationItem.rightBarButtonItem = btn
     }
     
     // To Add new Item in the TableView.
     @objc func addBtnHandle() {
         // When Add Button is Pressed
         addingNewItem()
-        navigationBtnSwapping()
+        navigationItemSettings(btn: doneBtn)
     }
-    
-    private func navigationBtnSwapping() {
-        navigationItem.rightBarButtonItem = nil
-        navigationItem.leftBarButtonItem = doneBtn
-    }
-    
+
     @objc func doneBtnHandle() {
         // When Done Button is Presssed
         endEditing()
@@ -136,7 +130,7 @@ extension ViewController: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         
-        navigationBtnSwapping()
+        navigationItemSettings(btn: doneBtn)
         
         let indexPath = getIndexPathOfSelectedTextField(textField: textField)
         tableView.scrollToRow(at: indexPath, at: .top, animated: true)
@@ -158,7 +152,7 @@ extension ViewController: UITextFieldDelegate {
     }
     
     private func endEditing() {
-        defaultNavigationItemSettings() // Setting the Navigation Settings to Defaults
+        navigationItemSettings(btn: addBtn) // Setting the Navigation Settings to Defaults
         tableView.endEditing(true) // End All the Editing of TableView.
     }
 }
