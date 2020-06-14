@@ -61,8 +61,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! CustomCell
-        // Assigning Delegates Fuctions to TextField
-        cell.nameTextField.delegate = self
+        
+        cell.nameTextField.delegate = self // Assigning Delegates Fuctions to TextField
+        cell.infoDelegate = self //Assiging Delgate Functions to InfoButton (Right View)
         return cell
     }
     
@@ -184,5 +185,15 @@ extension ViewController {
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
         }
+    }
+}
+
+
+// Calling the Delegate Function when Info button is pressed
+extension ViewController: infoButtonDelegate {
+    func showInfo(textField: UITextField) {
+        // Getting the IndexPath of the InfoButton which is pressed.
+        let indexPath = getIndexPathOfSelectedTextField(textField: textField)
+        print(indexPath)
     }
 }

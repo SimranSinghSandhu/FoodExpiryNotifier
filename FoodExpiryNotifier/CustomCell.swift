@@ -8,8 +8,16 @@
 
 import UIKit
 
+protocol infoButtonDelegate {
+    // Delegate Functions of Info Button (RightView) with a parameter of TextField.
+    func showInfo(textField: UITextField)
+}
+
 class CustomCell: UITableViewCell {
 
+    // Instance of the Protocol
+    var infoDelegate: infoButtonDelegate!
+    
     let nameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Enter new Item..."
@@ -38,6 +46,7 @@ class CustomCell: UITableViewCell {
         layoutIfNeeded()
     }
     
+    // Setting up the Right View of the TextField.
     private func settingRightView() {
         let infoBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 75, height: 75))
         infoBtn.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -47,7 +56,8 @@ class CustomCell: UITableViewCell {
     }
     
     @objc func infoBtnHandle(){
-        print("Info button is pressed!")
+        // When Info Button (Right View)is pressed on TextField
+        infoDelegate.showInfo(textField: nameTextField)
     }
     
     private func settingConstraints() {
