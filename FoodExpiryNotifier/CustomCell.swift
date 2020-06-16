@@ -69,6 +69,5 @@ class CustomCell: UITableViewCell {
         nameTextField.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 0).isActive = true
         nameTextField.heightAnchor.constraint(equalToConstant: self.frame.height).isActive = true
         nameTextField.widthAnchor.constraint(equalToConstant: width - padding).isActive = true
-        
     }
 }

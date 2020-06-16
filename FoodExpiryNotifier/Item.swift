@@ -11,5 +11,5 @@ import UIKit
 class Item: NSObject {
     
     var name: String?
-    
+    var date: String?
 }
