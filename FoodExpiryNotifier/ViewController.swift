@@ -313,4 +313,3 @@ extension ViewController: infoButtonDelegate {
         endEditing() // Ending all te TableView Editing.
     }
 }
-
