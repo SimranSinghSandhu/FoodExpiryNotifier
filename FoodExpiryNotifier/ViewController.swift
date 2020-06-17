@@ -46,6 +46,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.backgroundColor = UIColor.clear
+        
         // Assigning Deletage and Datasource Functions to TableView.
         tableView.delegate = self
         tableView.dataSource = self
@@ -58,6 +60,10 @@ class ViewController: UIViewController {
         
         navigationItemSettings(btn: addBtn)
         settingUpDatePicker()
+        
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableView.automaticDimension
+        
     }
     
 }
@@ -72,18 +78,16 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! CustomCell
         
+        
         cell.nameTextField.delegate = self // Assigning Delegates Fuctions to TextField
         cell.infoDelegate = self //Assiging Delgate Functions to InfoButton (Right View)
         
         cell.nameTextField.text = items[indexPath.row].name
+        cell.dateLabel.text = items[indexPath.row].date
         
         return cell
     }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
-    }
-    
+
     // When Cell Loads.
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let cell = cell as? CustomCell {
