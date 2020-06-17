@@ -49,6 +49,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        
         tableView.backgroundColor = UIColor.clear
         
         // Assigning Deletage and Datasource Functions to TableView.
