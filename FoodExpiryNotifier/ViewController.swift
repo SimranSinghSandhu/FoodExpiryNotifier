@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import CoreData
 
 class ViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
 
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
     // Navigation Item to Add Button
     let addBtn: UIBarButtonItem = {
         let btn = UIBarButtonItem()
@@ -135,7 +138,7 @@ extension ViewController: UITextFieldDelegate {
         // Getting the Current IndexPath.
         let indexPath: IndexPath = [0, items.count]
         
-        let newItem = Item() // Creating Instance of Items Array
+        let newItem = Item(context: context) // Creating Instance of Items Array
         
         newItem.name = "" // Default Text
         newItem.date = "" // Default Date
@@ -249,6 +252,7 @@ extension ViewController {
     private func updatingItem(textField: UITextField) {
         let indexPath = getIndexPathOfSelectedTextField(textField: textField)
         items[indexPath.row].name = textField.text
+        saveData()
     }
     
     // Deleting Empty Cells
@@ -311,5 +315,17 @@ extension ViewController: infoButtonDelegate {
         print("Cancel Button is Pressed.")
         animatingDatePickerView(height: 0) // Animating the YAxis of the PickerView to be = Height of the Screen.
         endEditing() // Ending all te TableView Editing.
+    }
+}
+
+// Saving and Loading Data Functions
+extension ViewController {
+    private func saveData() {
+        do {
+            try context.save()
+            print("Data Save Successful!")
+        } catch {
+            print("Error Saving Item", error.localizedDescription)
+        }
     }
 }
