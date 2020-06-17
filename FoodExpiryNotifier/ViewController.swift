@@ -33,23 +33,27 @@ class ViewController: UIViewController {
         return btn
     }()
     
+    // Custom View for our UIDatePicker and Toolbar.
     let pickerView: UIView = {
         let view = UIView()
         return view
     }()
     
-    let cellID = "cellID"
+    let cellID = "cellID" // Unique Cell Identifier.
     
     var items = [Item]()
+    var loadingData: Bool = false // When Loading Items from Database.
     
     let datePicker = UIDatePicker() // Inistializing DatePicker
     let toolbar = UIToolbar() // Initializing Toolbar for DatePicker
     
-    var indexNum = Int()
+    var indexNum = Int() // IndexNumber of the TextField who's RightView is Pressed.
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        loadData() // Loading Data When ViewLoads.
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)) // Getting Directery of Databse
         
         tableView.backgroundColor = UIColor.clear
         
@@ -68,7 +72,6 @@ class ViewController: UIViewController {
         
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
-        
     }
     
 }
@@ -97,7 +100,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let cell = cell as? CustomCell {
             // Latest Cell Becomes First Responder.
-            cell.nameTextField.becomeFirstResponder()
+            if !loadingData { // Only When Items are not Loading in TableView.
+                cell.nameTextField.becomeFirstResponder()
+            }
         }
     }
     
@@ -136,6 +141,8 @@ extension ViewController {
 extension ViewController: UITextFieldDelegate {
     
     private func addingNewItem() {
+        
+        loadingData = false
         
         // Getting the Current IndexPath.
         let indexPath: IndexPath = [0, items.count]
@@ -322,12 +329,25 @@ extension ViewController: infoButtonDelegate {
 
 // Saving and Loading Data Functions
 extension ViewController {
+    
+    // Save Data When Data Changes.
     private func saveData() {
         do {
             try context.save()
             print("Data Save Successful!")
         } catch {
             print("Error Saving Item", error.localizedDescription)
+        }
+    }
+    
+    // Loading Data When View Loads
+    private func loadData() {
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        do {
+            loadingData = true
+            items = try context.fetch(request)
+        } catch {
+            print("Error Loading Data from Database with Error =", error.localizedDescription)
         }
     }
 }
